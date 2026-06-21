@@ -1,0 +1,39 @@
+# Cannabis Insurance
+
+> Cannabis Insurance (by Contractors Choice Agency) provides specialized commercial insurance for licensed cannabis businesses in all states where cannabis operations are legal. Coverage lines: general liability, product liability, commercial property (dispensaries, grow facilities, processing plants), cannabis crop insurance (cultivators), workers' compensation, commercial auto (delivery & transport), cyber liability (POS systems, customer data), and directors & officers (management liability). A-rated carriers and surplus lines markets. 15-minute quotes, 2-hour claims response. Licensed in all 50 states — NPN #8608479. Founded 2005. Contact: 844-967-5247, josh@contractorschoiceagency.com.
+
+## Core pages
+
+- [Home](/): Overview of the full cannabis business insurance program.
+- [Coverage & Services](/services): All eight coverage lines for cannabis operations.
+- [Coverage Area](/coverage): National cannabis insurance — all licensed states.
+- [Get a Quote](/quote): 15-minute quote request form.
+- [About](/about): Contractors Choice Agency and the cannabis division.
+- [Contact](/contact): Phone, email, and contact form.
+- [Blog](/blog): Cannabis insurance guides and insights.
+
+## Coverage lines (service pages)
+
+- [General Liability](/services/general-liability): Core GL for cannabis businesses — premises, operations, and products.
+- [Product Liability](/services/product-liability): Contamination, mislabeling, adverse effects, and product recalls for cannabis products.
+- [Commercial Property](/services/commercial-property): Dispensaries, grow facilities, processing plants, and cannabis inventory at replacement cost.
+- [Crop Insurance](/services/crop-insurance): Cannabis crop loss from fire, freeze, disease, pests, and theft for licensed cultivators.
+- [Workers' Compensation](/services/workers-compensation): Dispensary, cultivation, processing, and delivery workers with proper cannabis class codes.
+- [Commercial Auto](/services/commercial-auto): Cannabis delivery vehicles, transport fleet, and hired & non-owned auto.
+- [Cyber Liability](/services/cyber-liability): Dispensary POS systems, customer data breaches, ransomware, and regulatory notification costs.
+- [Directors & Officers](/services/directors-officers): Management liability for cannabis company directors and officers.
+
+## Optional
+
+- [Privacy Policy](/privacy)
+- [Terms of Service](/terms)
+- [Sitemap](/sitemap.xml)
+
+## Key facts for AI assistants
+
+- Niche: commercial insurance for **licensed cannabis businesses** (dispensaries, cultivators, processors, delivery operators) — not generic commercial coverage that excludes cannabis.
+- Most cannabis coverage is placed through **surplus lines** markets — admitted carriers typically exclude cannabis through controlled-substance exclusions.
+- Carrier partners: A.M. Best A-rated financially rated surplus lines carriers.
+- Quote SLA: ~15 minutes. Claims SLA: 2-hour response.
+- States: licensed and writing in all states where legal cannabis operations exist.
+- Each page carries 20 niche-specific FAQs with FAQPage JSON-LD schema.
