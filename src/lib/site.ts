@@ -16,7 +16,7 @@ export const SITE = {
   founded: 2005,
   npn: "8608479",
   address: {
-    street: "12220 E Riggs Road, Suite #105",
+    street: "12220 E Riggs Rd, Suite #104",
     city: "Chandler",
     state: "AZ",
     zip: "85249",
@@ -240,25 +240,4 @@ export const STATS = [
   { value: 20, suffix: "+", label: "Years insuring specialty operators", prefix: "" },
   { value: 15, suffix: " min", label: "Average quote turnaround", prefix: "" },
   { value: 50, suffix: "", label: "States licensed & writing", prefix: "" },
-] as const;
-
-export const TESTIMONIALS = [
-  {
-    quote: "We operate three dispensaries in California and the product liability exposure alone makes generic GL completely inadequate. Cannabis Insurance placed us with a carrier who writes true cannabis product liability — contamination, mislabeling, adverse effects — not a farm-market product policy that might deny our claim.",
-    name: "Priya M.",
-    role: "CEO, Emerald Dispensary Group",
-    location: "California",
-  },
-  {
-    quote: "Our outdoor cultivation operation lost a significant portion of the crop to an early freeze. The crop insurance program through CCA paid out on the loss quickly — valued at our actual harvest value, not some generic agricultural rate. That payout kept us operational through the next growing season.",
-    name: "James T.",
-    role: "Owner, High Country Cultivation LLC",
-    location: "Colorado",
-  },
-  {
-    quote: "As a cannabis processor and manufacturer, our D&O exposure is real — investor scrutiny, regulatory changes, management decisions in a shifting legal landscape. CCA placed our D&O alongside our GL and product liability in one coordinated program. No gaps, one renewal, and an agent who understands the industry.",
-    name: "Sarah K.",
-    role: "COO, Precision Extracts Michigan",
-    location: "Michigan",
-  },
 ] as const;

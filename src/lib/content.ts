@@ -51,11 +51,6 @@ export const COPY = {
   process: {
     lead: "No two-week runaround. A real conversation, real markets that understand cannabis, and a program built around your operation type, license, and compliance requirements.",
   },
-  testimonials: {
-    eyebrow: "From cannabis operators",
-    h2Lead: "Cannabis businesses that found",
-    h2Highlight: "coverage that actually pays",
-  },
   finalCta: {
     h2Lead: "Protect Your Cannabis Business",
     h2Highlight: "with coverage built for the industry.",
