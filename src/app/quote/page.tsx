@@ -7,6 +7,8 @@ import { Footer } from "@/components/sections/Footer";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { SITE } from "@/lib/site";
 import { US_STATES, QUOTE_SERVICE_TYPES, YEARS_OPTIONS, COPY } from "@/lib/content";
+import AcordYnStep from "@/components/forms/AcordYnStep";
+import { validateYnStep, ynStepPayload } from "@/lib/acordYnSpec";
 import { CheckCircle2, ShieldCheck, ArrowRight, Phone, Clock, Zap, MapPin } from "lucide-react";
 
 const WEBHOOK_URL = `https://josh.jam-bot.com/social-api/api/leads/webhook/netlify?tenant=josh&site=${SITE.domain}`;
@@ -21,8 +23,12 @@ const trustItems = [
 export default function QuotePage() {
   const [formData, setFormData] = useState({
     name: "", businessName: "", email: "", phone: "", state: "", serviceType: "", yearsInBusiness: "", message: "", "bot-field": "",
-    street_address: "", city: "", zip: "", fein: "", year_business_started: "", business_description: "", prior_carrier_name: "", prior_policy_number: "", prior_policy_expiration: "",
+    street_address: "", city: "", zip: "", year_business_started: "", business_description: "", prior_carrier_name: "", prior_policy_number: "", prior_policy_expiration: "",
   });
+  // ACORD 125/126 underwriting answers (step 2). Unanswered questions stay blank and are never posted.
+  const [yn, setYn] = useState<Record<string, string>>({});
+  const setYnVal = (k: string, v: string) => setYn((prev) => ({ ...prev, [k]: v }));
+  const [step, setStep] = useState<1 | 2>(1);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -34,17 +40,31 @@ export default function QuotePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData["bot-field"]) return;
+    if (step === 1) {
+      // native required-field validation already passed for step 1
+      setError("");
+      setStep(2);
+      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const problem = validateYnStep(yn);
+    if (problem) {
+      setError(problem.msg);
+      document.getElementById(`f-${problem.key}`)?.focus();
+      return;
+    }
+    const payload = { ...formData, ...ynStepPayload(yn) };
     setSubmitting(true);
     setError("");
     try {
       let stored = false;
       try {
-        const res = await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form_name: "quote", source: SITE.domain, ...formData }) });
+        const res = await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form_name: "quote", source: SITE.domain, ...payload }) });
         // The webhook answers 200 with stored:false when it did not store the lead.
         if (res.ok) { const j = await res.json().catch(() => null); stored = !!(j && j.ok === true && j.stored !== false); }
       } catch { /* fall through to Netlify Forms */ }
       if (!stored) {
-        const fb = await fetch("/__forms.html", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ "form-name": "quote", ...formData }).toString() });
+        const fb = await fetch("/__forms.html", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ "form-name": "quote", ...payload }).toString() });
         if (!fb.ok) throw new Error(String(fb.status));
       }
       setSubmitted(true);
@@ -112,6 +132,8 @@ export default function QuotePage() {
                       <input type="hidden" name="form-name" value="quote" />
                       <input name="bot-field" type="hidden" value={formData["bot-field"]} onChange={handleChange} className="hidden" />
 
+                      {step === 1 ? (
+                      <>
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div><label htmlFor="name" className={labelClass}>Full name *</label><input id="name" name="name" type="text" required value={formData.name} onChange={handleChange} placeholder="Jane Smith" className={inputClass} /></div>
                         <div><label htmlFor="businessName" className={labelClass}>Business name *</label><input id="businessName" name="businessName" type="text" required value={formData.businessName} onChange={handleChange} placeholder={COPY.quote.businessPlaceholder} className={inputClass} /></div>
@@ -153,10 +175,6 @@ export default function QuotePage() {
                         <input type="text" name="zip" value={formData.zip} onChange={(e) => setFormData({ ...formData, zip: e.target.value })} className={inputClass} />
                       </div>
                       <div>
-                        <label className={labelClass}>Federal Employer ID Number (FEIN)</label>
-                        <input type="text" name="fein" value={formData.fein} onChange={(e) => setFormData({ ...formData, fein: e.target.value })} className={inputClass} />
-                      </div>
-                      <div>
                         <label className={labelClass}>Year business started</label>
                         <input type="number" name="year_business_started" value={formData.year_business_started} onChange={(e) => setFormData({ ...formData, year_business_started: e.target.value })} className={inputClass} />
                       </div>
@@ -177,12 +195,22 @@ export default function QuotePage() {
                         <input type="date" name="prior_policy_expiration" value={formData.prior_policy_expiration} onChange={(e) => setFormData({ ...formData, prior_policy_expiration: e.target.value })} className={inputClass} />
                       </div>
 
+                      </>
+                      ) : (
+                      <>
+                        <h2 className="font-heading font-bold text-espresso text-lg">Underwriting and loss history</h2>
+                        <AcordYnStep vals={yn} setVal={setYnVal} />
+                      </>
+                      )}
 
                       {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
 
                       <p className="text-xs text-center text-mocha/70">No spam. No commitment. We'll only contact you about your quote.</p>
-                      <button type="submit" disabled={submitting} className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-clay-gradient text-white font-heading font-bold rounded-full shadow-warm hover:shadow-warm-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
-                        {submitting ? "Sending…" : "Request my free quote"}{!submitting && <ArrowRight className="h-5 w-5" />}
+                      {step === 2 && (
+                        <button type="button" onClick={() => { setError(""); setStep(1); }} className="w-full min-h-11 text-sm text-mocha underline">Back to your details</button>
+                      )}
+                      <button type="submit" disabled={submitting} className="w-full min-h-11 flex items-center justify-center gap-2 px-8 py-4 bg-clay-gradient text-white font-heading font-bold rounded-full shadow-warm hover:shadow-warm-lg hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                        {submitting ? "Sending…" : step === 1 ? "Continue" : "Request my free quote"}{!submitting && <ArrowRight className="h-5 w-5" />}
                       </button>
 </form>
                   </FadeIn>
